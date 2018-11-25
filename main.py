@@ -20,7 +20,7 @@ def generate_code():
     code += str(code_id) + CODE_DELIMITER
 
     today_date += f_today()
-    code += str(today_date) + CODE_DELIMITER
+    code += today_date + CODE_DELIMITER
 
     expiration_days = int(input("Input expiration days: "))
     if expiration_days > 0:
@@ -32,3 +32,12 @@ def generate_code():
     code += valid_flag
 
     return code
+
+
+def f_today():
+    import datetime
+    now = datetime.datetime.now()
+    today = str(now.day) + str(now.month) + str(now.year)
+
+    return today
+
