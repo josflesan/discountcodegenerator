@@ -1,4 +1,4 @@
 Useful links:
 
-::- yEd, nice application to create graphs.
-    https://www.yworks.com/yed-live/
+::- Name
+   :^ Url
