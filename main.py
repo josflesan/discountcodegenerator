@@ -7,6 +7,10 @@
 # under certain conditions.
 #
 ###################################################################################
+
+
+
+
 CODE_DELIMITER = "-"
 FILE_DELIMITER = "/"
 
@@ -45,3 +49,17 @@ def f_today():
 
     return today
 
+
+###################################################################################
+#                               M   A   I   N
+def main():
+    # This option will be an action when button is pressed
+    option = int(input("Open File (1) or Create File (0): "))
+    if option == 1:
+        # Call Open File
+    if option == 2:
+        # Call Create FIle
+
+
+###################################################################################
+main()
