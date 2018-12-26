@@ -1,0 +1,18 @@
+#We recommend not edditing this file beacause it may lead to file corruptions
+<options>
+$file_name=
+$file_directory=
+$bits_for_code=8
+</options>
+<stats>
+$generated_codes=
+$validated_codes=
+</stats>
+<active_codes>
+D12%:09689574-19102018-010-V$56981242-26102018-20-V$
+D09%:89865698-27122018-FFF-V$
+</active_codes>
+<trash_codes>
+D12%:
+D09%:
+</trash_codes>
