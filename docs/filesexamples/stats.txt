@@ -1,0 +1,5 @@
+generatedcodes=5
+activecodes=4
+inactivecodes=1
+cleanedcodes=0
+validatedcodes=1
