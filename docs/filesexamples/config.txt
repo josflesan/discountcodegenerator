@@ -1,0 +1,4 @@
+foldername=filesexamples
+delimiter=$
+bitsforcode=8
+lastcleaner=28.12.2018
