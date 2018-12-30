@@ -1,2 +1,4 @@
 List of dependancies:
-1.
+1.txtfilemanager module
+2. datetime manipulation module
+(3. encryption module) -> to be added?
