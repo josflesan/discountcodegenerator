@@ -153,7 +153,7 @@ def random_code():
 def generate_code():
     code = ""
     # Calls validate_discount_amount to enter value and format it as <DXXX>
-    discount_amount = validate_discount_amount()>
+    discount_amount = validate_discount_amount()
     code += discount_amount
     # Read config file
     # Export the number of bits for the code
@@ -328,13 +328,6 @@ def file_menu():
                 }
     command = input(COMMAND_PREFIX + COMMAND_SUFFIX)
 
-    def credits():
-        print('''
-    Lemurer Discount Code Generator [Version 0.0.0]
-    Copyright <c> 2019 Lemurer Company
-
-    Type <help> fo more information.
-    ''')
     try:
         commands_dict[command]()  # Call the procedure/function specified by the command
     except:  # If the command is not found:
