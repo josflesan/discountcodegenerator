@@ -216,7 +216,7 @@ Type <help> fo more information.
 
 
 def help_print():
-    print('''Help''')
+    print('''Help ''')
     commands()
 
 
