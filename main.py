@@ -130,28 +130,70 @@ def open_dir(path):
 
 
 def generate_code():
+    # Read config file
+    # Export the number of bits for the code
+    # Generate unique code
+    # Input Discount
+    # Prefix the generated code with discount value
+    # Suffix the generated code with date of creation
+    # Input days to expire
+    # Suffix the days to expire to the generated code
+    # Store the code in random/direct access file via hashing algorithm
+    # Update stats
     pass
 
 
-def active_codes():
+def validate_code():
+    # Input code
+    # Hash code and look for position in random/direct access file
+    # If found move to serial file expired codes
+    #   Update stats
+    # If not found print error
     pass
 
 
-def expired_codes():
+def clean_expired_codes():
+    # Overwrite file with new empty serial file
     pass
 
 
-def settings():
+def create_settings():
     pass
 
 
-def file_stats():
+def read_settings():
+    # Read settings file
+    # Store all constants in the program
+    # Close file
     pass
 
 
-def credit():
+def change_settings():
+    # Read_settings()
+    # Show values
+    # Input new values
+    # Write new values
     pass
 
+
+def new_file_stats():
+    # Create file in specified directory
+    # Init all values to 0
+    # Close file
+    pass
+
+
+def init_file_stats():
+    # Read file stats
+    # Store all constants in program
+    # Close file
+    pass
+
+
+def close_file_stats():
+    # Write stats file will all the constants
+    # Close file
+    pass
 
 ###################################################################################
 
