@@ -14,7 +14,8 @@ import sys
 
 CODE_DELIMITER = "-"
 FILE_DELIMITER = "/"
-COMMAND_PREFIX = "lemurer@dcg $ "
+COMMAND_PREFIX = "lemurer@dcg"
+COMMAND_SUFFIX = " $ "
 
 # def generate_code():
 #     code = ""
@@ -198,10 +199,11 @@ def open_file():
         main()  # if invalid, rerun main menu
     pass
 
+
 def create_file():
-    name = input("\nPlease, input the folder name: ")
-    path = input("\nPlease enter the path where you want to create it in the form 'folder/subfolder': ")
-    create_dir(name, path)
+    folder_name = input("Enter the folder's name: ")
+    path = input("\nEnter the path where you want to create it - in the form 'folder/subfolder': ")
+    create_dir(folder_name, path)
     pass
 ###################################################################################
 
@@ -227,7 +229,7 @@ def commands():
                 "openfile": open_file,
                 "createfile": create_file,
                 }
-    command = input(COMMAND_PREFIX)
+    command = input(COMMAND_PREFIX + COMMAND_SUFFIX)
 
     try:
         commands_dict[command]()  # Call the procedure/function specified by the command
