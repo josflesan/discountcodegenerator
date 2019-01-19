@@ -151,19 +151,13 @@ def random_code():
 
 
 def generate_code():
+    # Input discount amount
+    discount_amount = validate_discount_amount()
+    # Prefix the generated code with discount value
     # Read config file
     # Export the number of bits for the code
     # Generate unique code
-    #code = random_code()
-    # Input Discount
-    try:
-        discount_amount = int(input("Enter discount percentage: "))
-    except: #If discount amount is not an integer
-        error01()
-        # Return to menu
-        main_menu()
-
-    # Prefix the generated code with discount value
+    #code = random_code(bits)
     # Suffix the generated code with date of creation
     date_of_creation = f_today()
 
@@ -172,6 +166,29 @@ def generate_code():
     # Store the code in random/direct access file via hashing algorithm
     # Update stats
     pass
+
+
+def validate_discount_amount():
+    valid = False
+    while not valid:
+        try:
+            discount_amount = int(input("Enter discount percentage [1-100]: "))
+        except:  # If discount amount is not an integer
+            error01()
+            validate_discount_amount()  # Try again
+            break  # Not sure about this line of code
+        if (discount_amount > 0) and (discount_amount <= 100):
+            valid = True
+
+    # Once the discount amount is valid, format it to be 3 digit string
+    format_discount_amount = str(discount_amount)
+
+    if len(format_discount_amount) == 2:
+        format_discount_amount = "0" + format_discount_amount
+    elif len(format_discount_amount) == 1:
+        format_discount_amount = "00" + format_discount_amount
+
+    return format_discount_amount
 
 
 def validate_code():
