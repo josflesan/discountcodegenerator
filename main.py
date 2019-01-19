@@ -144,7 +144,9 @@ def open_dir(path):
     else:
         return 0
 
-# ---- MAIN FUNCTIONS ----
+###################################################################################
+#                  M   A   I   N          F  U  N  C  T  I  O  N  S
+
 
 def random_code():
     pass
