@@ -49,9 +49,10 @@ COMMAND_SUFFIX = " $ "
 #                    E  R  R  O  R    F  U  N  C  T  I  O  N  S
 
 def error01():
-    print("Error 01: Unexpected input")
-    print("Type <help> for more information")
-    print("")
+    print('''Error 01: Unexpected input
+Type <help> for more information
+''')
+
 
 ###################################################################################
 #                      M  I  S  C     F  U  N  C  T  I  O  N  S
