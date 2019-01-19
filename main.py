@@ -42,10 +42,28 @@ COMMAND_SUFFIX = " $ "
 #     code += valid_flag
 #
 #     return code
+###################################################################################
 
 
 ###################################################################################
+#                    E  R  R  O  R    F  U  N  C  T  I  O  N  S
+
+def error01():
+    print("Error 01: Unexpected input")
+    print("Type <help> for more information")
+    print("")
+
+###################################################################################
 #                      M  I  S  C     F  U  N  C  T  I  O  N  S
+
+def dcg_credits():
+    print('''
+Lemurer Discount Code Generator [Version 0.0.0]
+Copyright <c> 2019 Lemurer Company
+
+Type <help> fo more information.
+''')
+
 
 def f_today():
     import datetime
@@ -91,7 +109,7 @@ def open_dir(path):
 
     if not os.path.exists(path):
         while True:
-            decision = input("\nPath doesn't exist, would you like to create it?: (Yes, or No) ").upper()[0]
+            decision = input("\nPath doesn't exist, would you like to create it? [Y/n]: ").upper()[0]
 
             if decision in ['Y', 'N']:
                 break
@@ -128,14 +146,27 @@ def open_dir(path):
 
 # ---- MAIN FUNCTIONS ----
 
+def random_code():
+    pass
+
 
 def generate_code():
     # Read config file
     # Export the number of bits for the code
     # Generate unique code
+    #code = random_code()
     # Input Discount
+    try:
+        discount_amount = int(input("Enter discount percentage: "))
+    except: #If discount amount is not an integer
+        error01()
+        # Return to menu
+        main_menu()
+
     # Prefix the generated code with discount value
     # Suffix the generated code with date of creation
+    date_of_creation = f_today()
+
     # Input days to expire
     # Suffix the days to expire to the generated code
     # Store the code in random/direct access file via hashing algorithm
@@ -146,8 +177,16 @@ def generate_code():
 def validate_code():
     # Input code
     # Hash code and look for position in random/direct access file
-    # If found move to serial file expired codes
-    #   Update stats
+    # If found:
+    #   Check expiration date
+    #       If expired:
+    #             Move to expired_codes
+    #             Print message
+    #       Else:
+    #             Validate
+    #             Print message
+    #             Move to expired_codes
+    #       Update stats
     # If not found print error
     pass
 
@@ -247,37 +286,44 @@ def create_file():
     path = input("\nEnter the path where you want to create it - in the form 'folder/subfolder': ")
     create_dir(folder_name, path)
     pass
-###################################################################################
 
 
-def credit_print():
-    print('''
-Lemurer Discount Code Generator [Version 0.0.0]
-Copyright <c> 2019 Lemurer Company
-
-Type <help> fo more information.
-''')
-
-
-def help_print():
+def file_menu_help():
     print('''Help ''')
-    commands()
+    file_menu()
 
 
-def commands():
-    # This is a dictionary menu for the command line
+def file_menu_clear():
+    for lines in range(300):
+        print(" ")
+    dcg_credits()
+    file_menu()
+
+
+def file_menu():
     # All possible commands are inside the commands dictionary (commands_dict)
-    commands_dict = {"help": help_print,
+    commands_dict = {"help": file_menu_help,
                 "openfile": open_file,
                 "createfile": create_file,
+                "clear": file_menu_clear,
                 }
     command = input(COMMAND_PREFIX + COMMAND_SUFFIX)
 
+    def credits():
+        print('''
+    Lemurer Discount Code Generator [Version 0.0.0]
+    Copyright <c> 2019 Lemurer Company
+
+    Type <help> fo more information.
+    ''')
     try:
         commands_dict[command]()  # Call the procedure/function specified by the command
     except:  # If the command is not found:
-        print("Type <help> fo more information")
-        commands()
+        error01()
+        file_menu()
+
+###################################################################################
+
 
 # I don't understand what you did here, please explain me
 #if __name__ == "__main__":
@@ -285,10 +331,15 @@ def commands():
 #    commands()
 #    file_menu()
 
-
+###################################################################################
+#                              M  A  I  N
 def main():
-    credit_print()
-    commands()
+    dcg_credits()
+    # User is only allowed to access file menu until the file is specified or created
+    file_menu()
+    # Once the file is specified, user can access main menu
+    main_menu()
+
 
 
 main()
