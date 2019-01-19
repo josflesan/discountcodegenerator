@@ -151,13 +151,14 @@ def random_code():
 
 
 def generate_code():
-    # Input discount amount
-    discount_amount = validate_discount_amount()
-    # Prefix the generated code with discount value
+    code = ""
+    # Calls validate_discount_amount to enter value and format it as <DXXX>
+    discount_amount = validate_discount_amount()>
+    code += discount_amount
     # Read config file
     # Export the number of bits for the code
     # Generate unique code
-    #code = random_code(bits)
+    #code += random_code(bits)
     # Suffix the generated code with date of creation
     date_of_creation = f_today()
 
@@ -188,6 +189,7 @@ def validate_discount_amount():
     elif len(format_discount_amount) == 1:
         format_discount_amount = "00" + format_discount_amount
 
+    format_discount_amount = "D" + format_discount_amount
     return format_discount_amount
 
 
