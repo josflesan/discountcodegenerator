@@ -1,6 +1,6 @@
 import os
 import sys
-from dependencies.txtFileManager.txtFileManager.txtFileManager import *
+#from dependencies.txtFileManager.txtFileManager.txtFileManager import *
 
 ###################################################################################
 #                       H   E   A   D   E   R
@@ -12,9 +12,9 @@ from dependencies.txtFileManager.txtFileManager.txtFileManager import *
 #
 ###################################################################################
 
-
 CODE_DELIMITER = "-"
 FILE_DELIMITER = "/"
+COMMAND_PREFIX = "lemurer@dcg $ "
 
 # def generate_code():
 #     code = ""
@@ -191,31 +191,60 @@ def main_menu():
 ###################################################################################
 #                   F   I   L   E       M   E   N   U
 
+def open_file():
+    path = input("\nPlease, input the path where your folder exists: ")
+    valid = open_dir(path)
+    if not valid:
+        main()  # if invalid, rerun main menu
+    pass
 
-def file_menu():
-    # This option will be an action when button is pressed
-    while True:
-        try:
-            option = int(input("Open File (1) or Create File (0): "))
-            break
-
-        except ValueError:
-            print("\nOption input should be an integer... ")
-            continue
-
-    if option == 1:
-        path = input("\nPlease, input the path where your folder exists: ")
-        valid = open_dir(path)
-        if not valid:
-            main()  # if invalid, rerun main menu
-        pass
-    elif option == 2:
-        name = input("\nPlease, input the folder name: ")
-        path = input("\nPlease enter the path where you want to create it in the form 'folder/subfolder': ")
-        create_dir(name, path)
-        pass
-
+def create_file():
+    name = input("\nPlease, input the folder name: ")
+    path = input("\nPlease enter the path where you want to create it in the form 'folder/subfolder': ")
+    create_dir(name, path)
+    pass
 ###################################################################################
 
-if __name__ == "__main__":
-    file_menu()
+
+def credit_print():
+    print('''
+Lemurer Discount Code Generator [Version 0.0.0]
+Copyright <c> 2019 Lemurer Company
+
+Type <help> fo more information.
+''')
+
+
+def help_print():
+    print('''Help''')
+    commands()
+
+
+def commands():
+    # This is a dictionary menu for the command line
+    # All possible commands are inside the commands dictionary (commands_dict)
+    commands_dict = {"help": help_print,
+                "openfile": open_file,
+                "createfile": create_file,
+                }
+    command = input(COMMAND_PREFIX)
+
+    try:
+        commands_dict[command]()  # Call the procedure/function specified by the command
+    except:  # If the command is not found:
+        print("Type <help> fo more information")
+        commands()
+
+# I don't understand what you did here, please explain me
+#if __name__ == "__main__":
+#    credit_print()
+#    commands()
+#    file_menu()
+
+
+def main():
+    credit_print()
+    commands()
+
+
+main()
