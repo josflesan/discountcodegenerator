@@ -77,18 +77,14 @@ done and you may risk the file becoming corrupt.
 
 Are you sure you want to terminate the program? [Y/n]
 ''')
-    valid = False
-    while not valid:
+    while True:
         option = input("main@comands_menu@terminate $ ")
         if (option == "Y") or (option == "y"):
-            valid = True
             return True
         elif (option == "N") or (option == "n"):
-            valid = True
             return False
         else:
             print(option, ": input not recognised")
-            valid = False
 
 
 def commands_list():
