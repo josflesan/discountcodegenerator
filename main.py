@@ -4,7 +4,7 @@
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.2]
+Lemurer Discount Code Generator [Version Alpha 0.0.3]
 Copyright <c> 2019 Lemurer Company''')
 
 
@@ -102,7 +102,7 @@ def commands_list():
 <closefile> : close and save opened file:
 <> :
 '''
-    page_number = 1  # starts reading from fist page
+    page_number = 1  # starts reading from first page
     pages = [page1, ]  # array of pages available
     page_header = "Commands List [{0}/{1}]".format(page_number, len(pages))
     page_footer = '''
