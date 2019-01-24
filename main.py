@@ -148,10 +148,10 @@ def new_file():
     # file directory. The files that will be created are:
 
     # README.txt : Text file that contains details about the manipulation of the program
-    # active.CODES : Random/Direct access file that contains all active codes
-    # inactive.CODES : Serial  access file that contains all codes that have been used or expired
-    # stats.DOC : Sequential access file that contains all the statistics of the file
-    # config.DOC : Sequential access file that contains all the config details of the file
+    # active.codes : Random/Direct access file that contains all active codes
+    # inactive.codes : Serial  access file that contains all codes that have been used or expired
+    # stats.doc : Sequential access file that contains all the statistics of the file
+    # config.doc : Sequential access file that contains all the config details of the file
     pass
 
 
