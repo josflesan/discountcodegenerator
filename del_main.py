@@ -1,4 +1,4 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.2]
+# Lemurer Discount Code Generator [Version Alpha 0.0.3]
 # Last Update: 24.01.19
 
 
@@ -21,10 +21,11 @@ Copyright <c> 2019 Lemurer Company''')
 # 0 : Command can be executed whenever the user desires to
 # 1 : Command can only be executed when no file has been opened or created
 # 2 : Command can only be executed when there is a currently opened file
-def commands_menu():
+def commands_menu(priority):
     commands_dict = {
                 "help": [help_, 0],
                 "commands": [commands_list, 0],
+                # "terminate": []
                 "clear": [clear, 0],
                 "credits": [project_credits, 0],
                 "version": [project_credits, 0],
@@ -34,11 +35,20 @@ def commands_menu():
                 }
     print("")
     command = input("main@commands_menu $ ")
-    try:
-        commands_dict[command][0]()  # call the procedure/function specified by the command
-    except KeyError:  # specified key is not found in the dictionary
-        print(command, ": command not found")
-    commands_menu()
+    if command == "terminate":
+        terminate = terminate_confirm()
+        return terminate
+    else:
+        try:
+            if (commands_dict[command][1] == 0) or (commands_dict[command][1] == priority):
+                commands_dict[command][0]()  # call the procedure/function specified by the command
+            else:
+                print(command, ": insufficient priority")
+
+        except KeyError:  # specified key is not found in the dictionary
+            print(command, ": command not found")
+
+            return False
 
 # ------------------------
 # Priority "zero" commands
@@ -54,19 +64,46 @@ following URL: <insert_url>
 ''')
 
 
+def clear():
+    for lines in range(100):
+        print(" ")
+
+
+def terminate_confirm():
+    print('''
+Warning!
+If you terminate the program you will loose all the progress
+done and you may risk the file becoming corrupt.
+
+Are you sure you want to terminate the program? [Y/n]
+''')
+    valid = False
+    while not valid:
+        option = input("main@comands_menu@terminate $ ")
+        if (option == "Y") or (option == "y"):
+            valid = True
+            return True
+        elif (option == "N") or (option == "n"):
+            valid = True
+            return False
+        else:
+            print(option, ": input not recognised")
+            valid = False
+
+
 def commands_list():
     # Maximum ten commands per page
     page1 = '''
 
 <help> : display a user help guideline
 <commands> : display a list of all possible commands
+<terminate> : finish execution of program
 <clear> : clear the console
 <credits> | <version> | <info> : displays program information
 <openfile> : open a program file
 <newfile> : create a new program file
 <savefile> : save program file changes
-<closefile> : close and save opened file
-<> :
+<closefile> : close and save opened file:
 <> :
 '''
     page_number = 1  # starts reading from fist page
@@ -98,10 +135,6 @@ stop reading the commands list input "stop".'''.format(page_number)
                 valid = True
 
 
-def clear():
-    for lines in range(100):
-        print(" ")
-
 # -----------------------
 # Priority "one" commands
 
@@ -127,4 +160,10 @@ def new_file():
 
 
 # ****************** Main program ******************
-commands_menu()
+def main():
+    priority = 1    # user starts with priority "one" since no file has been opened/created
+    _terminate_ = False
+    while not _terminate_:
+        _terminate_ = commands_menu(priority)
+
+main()
