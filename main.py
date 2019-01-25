@@ -15,6 +15,7 @@ import os  # used for directories and file manipulation
 import pickle  # used for binary files manipulations
 import time  # give information about dates and time
 import hashlib  # hashing algorithms
+import uuid  # random, unique code ID
 
 # ------------------
 # Program Constants
@@ -27,13 +28,17 @@ MAIN_FILE_NAME = "Discount Code Generator"
 
 class DiscountCode:
 
-    def __init__(self):
-        self.codeID = 0  # unique code ID number given to each code
-        self.amount = 0  # amount of discount percentage
-        self.code = 0  # code number
-        self.creationDate = None  # date of code creation
-        self.timeToExpire = 0  # days until expiration
-        self.codeValid = True  # boolean flag to indicate whether the code is valid or not
+    num = 0  # Counter (increases every time new code is created)
+
+    def __init__(self, id, amt, date, exp, valid):
+        self.codeID = id  # unique code ID number given to each code
+        self.amount = amt  # amount of discount percentage
+        self.code = self.num  # code number
+        self.creationDate = date  # date of code creation
+        self.timeToExpire = exp  # days until expiration
+        self.codeValid = valid  # boolean flag to indicate whether the code is valid or not
+
+        self.num += 1
 
 
 # --------------
@@ -42,6 +47,7 @@ class DiscountCode:
 def create_dir(location):
     # Function that creates a new directory where specified,
     # if the directory already exists it return False.
+
     try:
         os.mkdir(location)
         return True
@@ -52,8 +58,28 @@ def create_dir(location):
 def today():
     # Function that returns today's date.
     # dd/mm/yyyy format
+
     todays_date = time.strftime("%d/%m/%Y")
     return todays_date
+
+
+def table_output(codes: list):
+    # Function that contains code for enhanced output of code details
+    # Parameter: list of code objects
+
+    sep = '-' * 113  # Separator for table
+
+    print("{:^82}".format("ACTIVE CODES"))
+    print(sep)
+    print("{:<8s}{:>12s}{:>25s}{:>21s}{:>25s}".format("CODE #", "CODE ID", "DISCOUNT PERCENTAGE", "CREATION DATE",
+                                               "DAYS FOR EXPIRATION"))
+    print(sep)
+
+    for c in codes:
+        print("{:<12}{:>15s}{:^55s}{:>17s}{:>28}".format(c.code, c.codeID, c.amount, c.creationDate,
+                                                   c.timeToExpire))
+
+    print(sep)
 
 
 def lemur():
@@ -127,7 +153,6 @@ Help [1/1]
 Lemurer recommends for a more detailed help to read README.txt.
 If you are unable to find this file in your device, go to the
 following URL: <insert_url>
-
 ''')
 
 
@@ -139,16 +164,15 @@ def clear():
 def terminate_confirm():
     print('''
 Warning!
-If you terminate the program you will loose all the progress
+If you terminate the program you will lose all the progress
 done and you may risk the file becoming corrupt.
-
-Are you sure you want to terminate the program? [Y/n]
+Are you sure you want to terminate the program? [Y/N]
 ''')
     while True:
-        option = input("main@comands_menu@terminate $ ")
-        if (option == "Y") or (option == "y"):
+        option = input("main@comands_menu@terminate $ ").upper()[0]
+        if option == "Y":
             return True
-        elif (option == "N") or (option == "n"):
+        elif option == "N":
             return False
         else:
             print(option, ": input not recognised")
@@ -157,7 +181,6 @@ Are you sure you want to terminate the program? [Y/n]
 def commands_list():
     # Maximum ten commands per page
     page1 = '''
-
 <help> : display a user help guideline
 <commands> : display a list of all possible commands
 <terminate> : finish execution of program
@@ -170,7 +193,6 @@ def commands_list():
 <lemur> : print lemur
 '''
     page2 = '''
-
 <newcode> | <gencode> : generate new discount code
 <activecodes> | <acodes> : print a list of all active codes
 <inactivecodes> | <icodes>: print a list of all inactive codes
@@ -292,10 +314,17 @@ def new_file():
 
     # Create README.txt inside new_file_location
     file_handle = open(new_file_location + "/README.txt", "w")
-    file_content = ('''Discount Code Generator README.txt file
-Line Number 1                                             
-Line Number 2                                             
-Line Number 3''')
+    file_content = ('''Discount Code Generator README.txt file\n
+    \n
+PYTHON CODE GENERATOR MODULE\n
+Module allows for the manipulation and creation of unique codes,\n
+user interface based on command line prompts. \n
+For documentation on the various different commands and their uses, \n
+run command command_list() in the main program. \n
+\n
+Source Code: https://github.com/Alestiago/discountcodegenerator\n
+Lemurer Company 2019\n
+''')
     file_handle.write(file_content)
     file_handle.close()
 
@@ -347,20 +376,43 @@ Line Number 3''')
 # -------------------------
 # Priority "three" commands
 
-def generate_code():
-    pass
+def generate_code(codes: list):
+    # Generates code and inserts it into codes object list
+
+    id = str(uuid.uuid4().fields[-1])[:5]
+
+    amount = input("main@commands_menu@generate_code $ Input discount amount for code: ")
+    while True:
+        try:
+            assert(0 < int(amount) <= 100)
+            break
+        except AssertionError:
+            amount = input("main@commands_menu@generate_code $ Not an integer, try again: ")
+            continue
+
+    date = today()
+    expire = 7  # Should this be a constant, or inputted by the user?
+    valid = True
+
+    c = DiscountCode(id, amount, date, expire, valid)
+
+    codes.append(c)
 
 
-def file_active_codes():
-    pass
+def file_active_codes(codes: list):
+    active = [c for c in codes if c.codeValid]  # List comprehension selecting active codes
+    table_output(active)
 
 
-def file_inactive_codes():
-    pass
+def file_inactive_codes(codes: list):
+    inactive = [c for c in codes if not c.codeValid]  # List comprehension selecting inactive codes
+    table_output(inactive)
 
 
-def clear_file_inactive_codes():
-    pass
+def clear_file_inactive_codes(codes: list):
+    for c in codes:
+        if not c.codeValid:
+            del c  # Delete inactive codes from codes list
 
 
 def file_settings():
@@ -388,8 +440,8 @@ def main():
         _terminate_, priority = commands_menu(priority)
     lemur()
 
-
-main()
+if __name__ == "__main__":
+    main()
 
 
 # try:
