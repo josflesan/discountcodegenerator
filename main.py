@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.4a]
+# Lemurer Discount Code Generator [Version Alpha 0.0.4b]
 # Last Update: 24.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.4a]
+Lemurer Discount Code Generator [Version Alpha 0.0.4b]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -55,6 +55,10 @@ def today():
     return todays_date
 
 
+def lemur():
+    print("I love lemurs <3")
+
+
 # -------------
 # Commands Menu
 # A list of all the possible commands that can be executed by the user.
@@ -69,13 +73,24 @@ def commands_menu(priority):
     commands_dict = {
                 "help": [help_, 0],
                 "commands": [commands_list, 0],
-                # "terminate": []
+                # "terminate": [terminate, 0]
                 "clear": [clear, 0],
                 "credits": [project_credits, 0],
                 "version": [project_credits, 0],
                 "info": [project_credits, 0],
+                "lemur": [lemur, 0],
                 "openfile": [open_file, 1],
                 "newfile": [new_file, 1],
+                "newcode": [generate_code, 2],
+                "gencode": [generate_code, 2],
+                "activecodes": [file_active_codes, 2],
+                "acodes": [file_active_codes, 2],
+                "inactivecodes": [file_inactive_codes, 2],
+                "icodes": [file_inactive_codes, 2],
+                "clearinactivecodes": [clear_file_inactive_codes, 2],
+                "cicodes": [clear_file_inactive_codes, 2],
+                "settings": [file_settings, 2],
+                "stats": [file_stats, 2]
                 }
     print("")
     print(">> Input a valid command, type \"commands\" to view all commands")
@@ -145,10 +160,20 @@ def commands_list():
 <newfile> : create a new program file
 <savefile> : save program file changes
 <closefile> : close and save opened file
-<> :
+<lemur> : print lemur
 '''
+    page2 = '''
+
+<newcode> | <gencode> : generate new discount code
+<activecodes> | <acodes> : print a list of all active codes
+<inactivecodes> | <icodes>: print a list of all inactive codes
+<clearinactivecodes> | <cicodes> : delete all inactive codes
+<settings> : view and modify configuration of file
+<stats> : view file's statistics
+'''
+
     page_number = 1  # starts reading from first page
-    pages = [page1, ]  # array of pages available
+    pages = [page1, page2]  # array of pages available
     page_header = "Commands List [{0}/{1}]".format(page_number, len(pages))
     page_footer = '''
 You are currently reading page number {0}. If you wish to skip
@@ -167,6 +192,12 @@ stop reading the commands list input "stop".'''.format(page_number)
                     page_number = int(page_number)
                     if (page_number > 0) and (page_number <= len(pages)):
                         valid = True
+                        # Update header and footer page number values
+                        page_header = "Commands List [{0}/{1}]".format(page_number, len(pages))
+                        page_footer = '''
+You are currently reading page number {0}. If you wish to skip
+to another page input the desired page number. If you want to
+stop reading the commands list input "stop".'''.format(page_number)
                     else:
                         print(page_number, ": is not a valid page number")
                 except ValueError:
@@ -282,6 +313,29 @@ Line Number 3''')
 # -------------------------
 # Priority "three" commands
 
+def generate_code():
+    pass
+
+
+def file_active_codes():
+    pass
+
+
+def file_inactive_codes():
+    pass
+
+
+def clear_file_inactive_codes():
+    pass
+
+
+def file_settings():
+    pass
+
+
+def file_stats():
+    pass
+
 
 # ****************** Main program ******************
 def main():
@@ -289,6 +343,13 @@ def main():
     _terminate_ = False
     while not _terminate_:
         _terminate_ = commands_menu(priority)
+    lemur()
 
 
 main()
+
+
+# try:
+    # main()
+# except Exception:
+    # print("Unknown Exception, please report your incidence to Lemurer.")
