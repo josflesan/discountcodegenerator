@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.5a]
+# Lemurer Discount Code Generator [Version Alpha 0.0.5b]
 # Last Update: 25.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.5a]
+Lemurer Discount Code Generator [Version Alpha 0.0.5b]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -234,7 +234,8 @@ def open_file():
     try:
         config_data = (pickle.load(file_handle))
     except EOFError:
-        pass
+        print("Failed to load config file data")
+        return 1
     file_handle.close()
 
     # Validate file password
@@ -248,12 +249,16 @@ def open_file():
         return 1
 
     # Load stats.dat into stats_data
-    file_handle = open(new_file_location + "/stats.dat", "rb")
-
+    try:
+        file_handle = open(new_file_location + "/stats.dat", "rb")
+    except FileNotFoundError:
+        print(file_name, ": file not found")
+        return 1
     try:
         stats_data = (pickle.load(file_handle))
     except EOFError:
-        pass
+        print("Failed to load config stats data")
+        return 1
     file_handle.close()
 
     return 2
