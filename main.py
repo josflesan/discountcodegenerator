@@ -1,18 +1,19 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.3c]
+# Lemurer Discount Code Generator [Version Alpha 0.0.4a]
 # Last Update: 24.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.3c]
+Lemurer Discount Code Generator [Version Alpha 0.0.4a]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
 # Program imports
 
 
-import os
-
+import os  # used for directories and file manipulation
+import pickle  # used for binary files manipulations
+import time  # give information about dates and time
 
 # ------------------
 # Program Constants
@@ -47,6 +48,13 @@ def create_dir(location):
         return False
 
 
+def today():
+    # Function that returns today's date.
+    # dd/mm/yyyy format
+    todays_date = time.strftime("%d/%m/%Y")
+    return todays_date
+
+
 # -------------
 # Commands Menu
 # A list of all the possible commands that can be executed by the user.
@@ -70,6 +78,7 @@ def commands_menu(priority):
                 "newfile": [new_file, 1],
                 }
     print("")
+    print(">> Input a valid command, type \"commands\" to view all commands")
     command = input("main@commands_menu $ ")
     if command == "terminate":
         terminate = terminate_confirm()
@@ -135,7 +144,7 @@ def commands_list():
 <openfile> : open a program file
 <newfile> : create a new program file
 <savefile> : save program file changes
-<closefile> : close and save opened file:
+<closefile> : close and save opened file
 <> :
 '''
     page_number = 1  # starts reading from first page
@@ -172,18 +181,41 @@ stop reading the commands list input "stop".'''.format(page_number)
 
 
 def open_file():
+    current_location = os.getcwd() + "/" + MAIN_FILE_NAME  # get current .py location
+    print(">> Input file name")
+    file_name = input("main@commands_menu@openfile $ ")
+    new_file_location = current_location + "/" + file_name
+
+    # Load config.dat into config_data
+    file_handle = open(new_file_location + "/config.dat", "rb")
+
+    try:
+        config_data = (pickle.load(file_handle))
+    except EOFError:
+        pass
+    file_handle.close()
+
+    # Load stats.dat into stats_data
+    file_handle = open(new_file_location + "/stats.dat", "rb")
+
+    try:
+        stats_data = (pickle.load(file_handle))
+    except EOFError:
+        pass
+    file_handle.close()
+
     pass
 
 
 def new_file():
     # This function will create a total of 5 different files in a new sub-directory located
-    # in the program file directory. The files that will be created are:
+    # in the program's file directory. The files that will be created are:
 
     # README.txt : Text file that contains details about the manipulation of the program
-    # active.codes : Random/Direct access file that contains all active codes
-    # inactive.codes : Serial  access file that contains all codes that have been used or expired
-    # stats.doc : Sequential access file that contains all the statistics of the file
-    # config.doc : Sequential access file that contains all the config details of the file
+    # active.codes : Random/Direct access binary file that contains all active codes
+    # inactive.codes : Serial  access binary file that contains all codes that have been used or expired
+    # stats.doc : Binary file that contains all the statistics of the file
+    # config.doc : Binary file that contains all the config details of the file
 
     current_location = os.getcwd()  # get current .py location
 
@@ -192,7 +224,8 @@ def new_file():
     program_location = str(current_location) + "/" + MAIN_FILE_NAME
     create_dir(program_location)  # create MAIN_FILE_NAME if it does not exist
 
-    # Create new directory inside MAIN_FILE_NAME
+    # Create new directory (folder) inside MAIN_FILE_NAME
+    print(">> Input new file name")
     new_file_name = input("main@commands_menu@create_file $ ")  # users specifies new file name
     new_file_location = program_location + "/" + new_file_name  # format new file name to be a valid directory
     valid_name = create_dir(new_file_location)  # create new file name
@@ -209,10 +242,41 @@ Line Number 3''')
     file_handle.write(file_content)
     file_handle.close()
 
+    # Create config.dat inside new_fie_location
+    file_handle = open(new_file_location + "/config.dat", "wb")  # open file for binary write
+
+    print(">> Input maximum number of codes that can be generated")
+    valid = False  # validate that the code limit is a positive integer
+    while not valid:
+        try:
+            codes_limit = input("main@commands_menu@new_file $ ")
+            codes_limit = int(codes_limit)
+            if codes_limit > 1:
+                valid = True
+            else:
+                print(codes_limit, ": is not a positive integer")
+        except ValueError:
+            print(codes_limit, ": is not an integer")
+
+    config_details = {"file_location": new_file_location,
+                      "codes_limit": codes_limit,
+                      "code_digits": len(str(codes_limit)),
+                      }  # dictionary containing configuration details
+    pickle.dump(config_details, file_handle)  # write whole dictionary to the binary file config.dat
+    file_handle.close()  # close binary file config.dat
+
+    # Create stats.dat inside new_file_location
+    file_handle = open(new_file_location + "/stats.dat", "wb")  # open file for binary write
+    config_details = {"file_creation": today(),
+                      "last_update": today(),
+                      "generated_codes": 0,
+                      "inactive_codes": 0,
+                      }  # dictionary containing configuration details
+    pickle.dump(config_details, file_handle)  # write whole dictionary to the binary file stats.dat
+    file_handle.close()  # close binary file stats.dat
+
     # Create active.codes inside new_file_location
     # Create inactive.codes inside new_file_location
-    # Create stats.doc inside new_file_location
-    # Create config.doc inside new_fie_location
 
 
 # -------------------------
