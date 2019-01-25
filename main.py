@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.3b]
+# Lemurer Discount Code Generator [Version Alpha 0.0.3c]
 # Last Update: 24.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.3b]
+Lemurer Discount Code Generator [Version Alpha 0.0.3c]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -18,6 +18,20 @@ import os
 # Program Constants
 
 MAIN_FILE_NAME = "Discount Code Generator"
+
+# ---------------
+# Program Objects
+
+
+class DiscountCode:
+
+    def __init__(self):
+        self.codeID = 0  # unique code ID number given to each code
+        self.amount = 0  # amount of discount percentage
+        self.code = 0  # code number
+        self.creationDate = None  # date of code creation
+        self.timeToExpire = 0  # days until expiration
+        self.codeValid = True  # boolean flag to indicate whether the code is valid or not
 
 
 # --------------
