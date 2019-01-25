@@ -377,7 +377,7 @@ def save_file():
 
 def close_file():
     save_file()
-    return = 1
+    return 1
 
 
 # ****************** Main program ******************
