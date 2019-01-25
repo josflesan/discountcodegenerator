@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.4d]
+# Lemurer Discount Code Generator [Version Alpha 0.0.4e]
 # Last Update: 25.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.4d]
+Lemurer Discount Code Generator [Version Alpha 0.0.4e]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -15,6 +15,7 @@ import os  # used for directories and file manipulation
 import pickle  # used for binary files manipulations
 import time  # give information about dates and time
 import hashlib  # hashing algorithms
+
 # ------------------
 # Program Constants
 
@@ -97,7 +98,9 @@ def commands_menu(priority):
     command = input("main@commands_menu $ ")
     if command == "terminate":
         terminate = terminate_confirm()
-        return terminate
+        return terminate, priority
+    elif command == "openfile":
+        priority = open_file()
     else:
         try:
             if (commands_dict[command][1] == 0) or (commands_dict[command][1] == priority):
@@ -108,7 +111,7 @@ def commands_menu(priority):
         except KeyError:  # specified key is not found in the dictionary
             print(command, ": command not found")
 
-            return False
+    return False, priority
 
 # ------------------------
 # Priority "zero" commands
@@ -218,7 +221,11 @@ def open_file():
     new_file_location = current_location + "/" + file_name
 
     # Load config.dat into config_data
-    file_handle = open(new_file_location + "/config.dat", "rb")
+    try:
+        file_handle = open(new_file_location + "/config.dat", "rb")
+    except FileNotFoundError:
+        print(file_name, ": file not found")
+        return 1
 
     try:
         config_data = (pickle.load(file_handle))
@@ -234,7 +241,7 @@ def open_file():
 
     if hash_password != config_data["password"]:
         print(password, ": invalid password")
-        return
+        return 1
 
     # Load stats.dat into stats_data
     file_handle = open(new_file_location + "/stats.dat", "rb")
@@ -245,7 +252,7 @@ def open_file():
         pass
     file_handle.close()
 
-    pass
+    return 2
 
 
 def new_file():
@@ -360,7 +367,7 @@ def main():
     priority = 1    # user starts with priority "one" since no file has been opened/created
     _terminate_ = False
     while not _terminate_:
-        _terminate_ = commands_menu(priority)
+        _terminate_, priority = commands_menu(priority)
     lemur()
 
 
