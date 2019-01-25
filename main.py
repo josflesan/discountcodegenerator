@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.4c]
-# Last Update: 24.01.19
+# Lemurer Discount Code Generator [Version Alpha 0.0.4d]
+# Last Update: 25.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.4c]
+Lemurer Discount Code Generator [Version Alpha 0.0.4d]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -14,7 +14,7 @@ Copyright <c> 2019 Lemurer Company''')
 import os  # used for directories and file manipulation
 import pickle  # used for binary files manipulations
 import time  # give information about dates and time
-
+import hashlib  # hashing algorithms
 # ------------------
 # Program Constants
 
@@ -229,7 +229,8 @@ def open_file():
     # Validate file password
     print(">> Input file password")
     password = input("main@commands_menu@openfile $ ")
-    hash_password = hash(password)
+    hash_object = hashlib.md5(password.encode())
+    hash_password = hash_object.hexdigest()
 
     if hash_password != config_data["password"]:
         print(password, ": invalid password")
@@ -288,7 +289,8 @@ Line Number 3''')
     # Create file password
     print(">> Input a file password")
     password = input("main@commands_menu@new_file $ ")
-    hash_password = hash(password)
+    hash_object = hashlib.md5(password.encode())
+    hash_password = hash_object.hexdigest()
 
     # Specify amount of codes that can be generated
     print(">> Input maximum number of codes that can be generated")
