@@ -1,15 +1,37 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.3]
+# Lemurer Discount Code Generator [Version Alpha 0.0.3a]
 # Last Update: 24.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.3]
+Lemurer Discount Code Generator [Version Alpha 0.0.3a]
 Copyright <c> 2019 Lemurer Company''')
+
+# ---------------
+# Program imports
+
+
+import os
 
 
 # ------------------
 # Program Constants
+
+MAIN_FILE_NAME = "Discount Code Generator"
+
+
+# --------------
+# Misc Functions
+
+def create_dir(location):
+    # Function that creates a new directory where specified if
+    # directory already exists it return False.
+    try:
+        os.mkdir(location)
+        return True
+    except OSError:
+        return False
+
 
 # -------------
 # Commands Menu
@@ -140,15 +162,35 @@ def open_file():
 
 
 def new_file():
-    # This function will create a total of 5 different files in a new sub-folder located in the program
-    # file directory. The files that will be created are:
+    # This function will create a total of 5 different files in a new sub-directory located
+    # in the program file directory. The files that will be created are:
 
     # README.txt : Text file that contains details about the manipulation of the program
     # active.codes : Random/Direct access file that contains all active codes
     # inactive.codes : Serial  access file that contains all codes that have been used or expired
     # stats.doc : Sequential access file that contains all the statistics of the file
     # config.doc : Sequential access file that contains all the config details of the file
-    pass
+
+    current_location = os.getcwd()  # get current .py location
+
+    # Check if MAIN_FILE_NAME directory exists, if not create it
+
+    program_location = str(current_location) + "/" + MAIN_FILE_NAME
+    create_dir(program_location)  # create MAIN_FILE_NAME if it does not exist
+
+    # Create new directory inside MAIN_FILE_NAME
+    new_file_name = input("main@commands_menu@create_file $ ")  # users specifies new file name
+    new_file_location = program_location + "/" + new_file_name  # format new file name to be a valid directory
+    valid_name = create_dir(new_file_location)  # create new file name
+    if not valid_name:  # if file name already exists
+        print(new_file_location, ": File already exists")
+        return  # stop running procedure
+
+    # Create README.txt inside new_file_location
+    # Create active.codes inside new_file_location
+    # Create inactive.codes inside new_file_location
+    # Create stats.doc inside new_file_location
+    # Create config.doc inside new_fie_location
 
 
 # -------------------------
