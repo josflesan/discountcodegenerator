@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.4b]
+# Lemurer Discount Code Generator [Version Alpha 0.0.4c]
 # Last Update: 24.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.4b]
+Lemurer Discount Code Generator [Version Alpha 0.0.4c]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -226,6 +226,15 @@ def open_file():
         pass
     file_handle.close()
 
+    # Validate file password
+    print(">> Input file password")
+    password = input("main@commands_menu@openfile $ ")
+    hash_password = hash(password)
+
+    if hash_password != config_data["password"]:
+        print(password, ": invalid password")
+        return
+
     # Load stats.dat into stats_data
     file_handle = open(new_file_location + "/stats.dat", "rb")
 
@@ -276,6 +285,12 @@ Line Number 3''')
     # Create config.dat inside new_fie_location
     file_handle = open(new_file_location + "/config.dat", "wb")  # open file for binary write
 
+    # Create file password
+    print(">> Input a file password")
+    password = input("main@commands_menu@new_file $ ")
+    hash_password = hash(password)
+
+    # Specify amount of codes that can be generated
     print(">> Input maximum number of codes that can be generated")
     valid = False  # validate that the code limit is a positive integer
     while not valid:
@@ -290,6 +305,7 @@ Line Number 3''')
             print(codes_limit, ": is not an integer")
 
     config_details = {"file_location": new_file_location,
+                      "password": hash_password,
                       "codes_limit": codes_limit,
                       "code_digits": len(str(codes_limit)),
                       }  # dictionary containing configuration details
