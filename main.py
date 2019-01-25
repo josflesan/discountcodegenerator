@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.4e]
+# Lemurer Discount Code Generator [Version Alpha 0.0.5a]
 # Last Update: 25.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.4e]
+Lemurer Discount Code Generator [Version Alpha 0.0.5a]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -91,7 +91,9 @@ def commands_menu(priority):
                 "clearinactivecodes": [clear_file_inactive_codes, 2],
                 "cicodes": [clear_file_inactive_codes, 2],
                 "settings": [file_settings, 2],
-                "stats": [file_stats, 2]
+                "stats": [file_stats, 2],
+                "savefile": [save_file, 2],
+                "closefile": [close_file, 2]
                 }
     print("")
     print(">> Input a valid command, type \"commands\" to view all commands")
@@ -101,6 +103,8 @@ def commands_menu(priority):
         return terminate, priority
     elif command == "openfile":
         priority = open_file()
+    elif command == "closefile":
+        priority = close_file()
     else:
         try:
             if (commands_dict[command][1] == 0) or (commands_dict[command][1] == priority):
@@ -360,6 +364,15 @@ def file_settings():
 
 def file_stats():
     pass
+
+
+def save_file():
+    pass
+
+
+def close_file():
+    save_file()
+    return = 1
 
 
 # ****************** Main program ******************
