@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.3a]
+# Lemurer Discount Code Generator [Version Alpha 0.0.3b]
 # Last Update: 24.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.3a]
+Lemurer Discount Code Generator [Version Alpha 0.0.3b]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -24,8 +24,8 @@ MAIN_FILE_NAME = "Discount Code Generator"
 # Misc Functions
 
 def create_dir(location):
-    # Function that creates a new directory where specified if
-    # directory already exists it return False.
+    # Function that creates a new directory where specified,
+    # if the directory already exists it return False.
     try:
         os.mkdir(location)
         return True
@@ -187,6 +187,14 @@ def new_file():
         return  # stop running procedure
 
     # Create README.txt inside new_file_location
+    file_handle = open(new_file_location + "/README.txt", "w")
+    file_content = ('''Discount Code Generator README.txt file
+Line Number 1                                             
+Line Number 2                                             
+Line Number 3''')
+    file_handle.write(file_content)
+    file_handle.close()
+
     # Create active.codes inside new_file_location
     # Create inactive.codes inside new_file_location
     # Create stats.doc inside new_file_location
