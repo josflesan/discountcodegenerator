@@ -1,10 +1,10 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.5b]
-# Last Update: 25.01.19
+# Lemurer Discount Code Generator [Version Alpha 0.0.6a]
+# Last Update: 26.01.19
 
 
 def project_credits():
     print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.5b]
+Lemurer Discount Code Generator [Version Alpha 0.0.6a]
 Copyright <c> 2019 Lemurer Company''')
 
 # ---------------
@@ -283,6 +283,23 @@ def open_file():
         return 1
     file_handle.close()
 
+    # Load inactive.codes into inactive_data
+    try:
+        file_handle = open(new_file_location + "/inactive.codes", "rb")
+    except FileNotFoundError:
+        print(file_name, ": file not found")
+        return 1
+
+    inactive_data = []  # initialise inactive_data array
+
+    EOF = False
+    while not EOF:
+        try:
+            inactive_data.append(pickle.load(file_handle))
+        except EOFError:
+            EOF = True
+    file_handle.close()
+
     return 2
 
 
@@ -371,6 +388,14 @@ Lemurer Company 2019\n
 
     # Create active.codes inside new_file_location
     # Create inactive.codes inside new_file_location
+    file_handle = open(new_file_location + "/inactive.codes", "wb")  # open inactive codes file for binary write
+    inactive_codes = []  # initialise inactive codes array
+    for i in range(codes_limit):
+        inactive_codes.append(DiscountCode(0, 0, 0, 0, 0))  # making inactive codes as:
+                                                            # [DiscountCode() for i in range(codes_limit)]
+        pickle.dump(inactive_codes[i], file_handle)  # write a whole record to binary file inactive.codes
+
+    file_handle.close()  # close inactive.codes file
 
 
 # -------------------------
@@ -391,28 +416,28 @@ def generate_code(codes: list):
             continue
 
     date = today()
-    expire = 7  # Should this be a constant, or inputted by the user?
-    valid = True
+    days_until_expire = 7  # the expiration date is specified by the user, if the input is 9999 or above it will be
+    valid = True           # treated as "forever", so it has no expiration date
 
-    c = DiscountCode(id, amount, date, expire, valid)
+    c = DiscountCode(id, amount, date, days_until_expire, valid)
 
     codes.append(c)
 
 
 def file_active_codes(codes: list):
-    active = [c for c in codes if c.codeValid]  # List comprehension selecting active codes
+    active = [c for c in codes if c.codeValid]  # list comprehension selecting active codes
     table_output(active)
 
 
 def file_inactive_codes(codes: list):
-    inactive = [c for c in codes if not c.codeValid]  # List comprehension selecting inactive codes
+    inactive = [c for c in codes if not c.codeValid]  # list comprehension selecting inactive codes
     table_output(inactive)
 
 
 def clear_file_inactive_codes(codes: list):
     for c in codes:
         if not c.codeValid:
-            del c  # Delete inactive codes from codes list
+            del c  # delete inactive codes from codes list
 
 
 def file_settings():
@@ -434,13 +459,14 @@ def close_file():
 
 # ****************** Main program ******************
 def main():
-    priority = 1    # user starts with priority "one" since no file has been opened/created
+    priority = 1  # user starts with priority "one" since no file has been opened/created
     _terminate_ = False
     while not _terminate_:
         _terminate_, priority = commands_menu(priority)
     lemur()
 
-if __name__ == "__main__":
+
+if __name__ == "__main__":  # please add a comment to this to explain what it does.
     main()
 
 
