@@ -283,6 +283,23 @@ def open_file():
         return 1
     file_handle.close()
 
+    # Load active.codes into active_data
+    try:
+        file_handle = open(new_file_location + "/active.codes", "rb")
+    except FileNotFoundError:
+        print(file_name, ": file not found")
+        return 1
+
+    active_data = []  # initialise inactive_data array
+
+    EOF = False
+    while not EOF:
+        try:
+            active_data.append(pickle.load(file_handle))
+        except EOFError:
+            EOF = True
+    file_handle.close()
+
     # Load inactive.codes into inactive_data
     try:
         file_handle = open(new_file_location + "/inactive.codes", "rb")
@@ -387,6 +404,15 @@ Lemurer Company 2019\n
     file_handle.close()  # close binary file stats.dat
 
     # Create active.codes inside new_file_location
+    file_handle = open(new_file_location + "/active.codes", "wb")  # open active codes file for binary write
+    active_codes = []  # initialise inactive codes array
+    for i in range(codes_limit):
+        active_codes.append(DiscountCode(0, 0, 0, 0, 0))  # making active codes as:
+                                                            # [DiscountCode() for i in range(codes_limit)]
+        pickle.dump(active_codes[i], file_handle)  # write a whole record to binary file active.codes
+
+    file_handle.close()  # close active.codes file
+
     # Create inactive.codes inside new_file_location
     file_handle = open(new_file_location + "/inactive.codes", "wb")  # open inactive codes file for binary write
     inactive_codes = []  # initialise inactive codes array
