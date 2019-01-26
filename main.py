@@ -7,9 +7,9 @@ def project_credits():
 Lemurer Discount Code Generator [Version Alpha 0.0.6a]
 Copyright <c> 2019 Lemurer Company''')
 
+
 # ---------------
 # Program imports
-
 
 import os  # used for directories and file manipulation
 import pickle  # used for binary files manipulations
@@ -17,10 +17,12 @@ import time  # give information about dates and time
 import hashlib  # hashing algorithms
 import uuid  # random, unique code ID
 
+
 # ------------------
 # Program Constants
 
 MAIN_FILE_NAME = "Discount Code Generator"
+
 
 # ---------------
 # Program Objects
@@ -143,9 +145,9 @@ def commands_menu(priority):
 
     return False, priority
 
+
 # ------------------------
 # Priority "zero" commands
-
 
 def help_():
     print('''
@@ -238,7 +240,6 @@ stop reading the commands list input "stop".'''.format(page_number)
 
 # -----------------------
 # Priority "one" commands
-
 
 def open_file():
     current_location = os.getcwd() + "/" + MAIN_FILE_NAME  # get current .py location
@@ -484,6 +485,7 @@ def close_file():
 
 
 # ****************** Main program ******************
+
 def main():
     priority = 1  # user starts with priority "one" since no file has been opened/created
     _terminate_ = False
