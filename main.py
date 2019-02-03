@@ -555,7 +555,6 @@ def file_settings():
 
 
 def file_stats():
-    global stats_data
     print('''
 ---------------------------
 File Creation: {0}
@@ -564,10 +563,10 @@ Generated Codes: {2}
 Validated Codes: {3}
 Expired Codes: {4}
 ---------------------------'''.format(stats_data["file_creation"],
-                             stats_data["last_update"],
-                             stats_data["generated_codes"],
-                             stats_data["validated_codes"],
-                             stats_data["expired_codes"]))
+                                      stats_data["last_update"],
+                                      stats_data["generated_codes"],
+                                      stats_data["validated_codes"],
+                                      stats_data["expired_codes"]))
 
 
 def save_file():
