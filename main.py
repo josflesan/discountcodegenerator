@@ -84,12 +84,12 @@ Discount Amount: {2}
 Creation Date: {3}
 Time To Expire: {4}
 Valid: {5}
-----------------------------'''.format(self.GetCode,
-                                       self.GetNumber,
-                                       self.GetDiscount,
-                                       self.GetCreationDate,
-                                       self.GetTimeToExpire,
-                                       self.GetValid))
+----------------------------'''.format(self.GetCode(),
+                                       self.GetNumber(),
+                                       self.GetDiscount(),
+                                       self.GetCreationDate(),
+                                       self.GetTimeToExpire(),
+                                       self.GetValid()))
 
 
 # --------------
@@ -135,7 +135,7 @@ def table_output(codes):
 
 def code_output(codes):
     for i in range(len(codes)):
-        if codes[i].GetCode > 0:
+        if codes[i].GetCode() != 0:
             codes[i].PrintCode()
 
 
@@ -467,15 +467,15 @@ Lemurer Company 2019\n
     active_codes = []  # initialise inactive codes array
     for i in range(codes_limit):
         # Fill all the file with dummy records
-        active_codes.append(DiscountCode(0))  # making active codes as:
-                                                            # [DiscountCode() for i in range(codes_limit)]
+        #active_codes.append(DiscountCode(0))  # making active codes as:
+        active_codes = [DiscountCode(0) for i in range(codes_limit)]
         pickle.dump(active_codes[i], file_handle)  # write a whole record to binary file active.codes
 
     file_handle.close()  # close active.codes file
 
     # Create inactive.codes inside new_file_location
     file_handle = open(new_file_location + "/inactive.codes", "wb")  # open inactive codes file for binary write
-    inactive_codes = ["0"]  # initialise inactive codes array
+    inactive_codes = [DiscountCode(0)]  # initialise inactive codes array
     pickle.dump(inactive_codes, file_handle)  # write a whole array to binary file inactive.codes
 
     file_handle.close()  # close inactive.codes file
@@ -547,7 +547,7 @@ def file_inactive_codes():
 
 def clear_file_inactive_codes():
     global inactive_data
-    inactive_data = ["0"]
+    inactive_data = [DiscountCode(0)]
 
 
 def file_settings():
@@ -601,8 +601,6 @@ def close_file():
 
 
 # ****************** Main program ******************
-c23 = DiscountCode(21)
-c23.PrintCode()
 
 def main():
     priority = 1  # user starts with priority "one" since no file has been opened/created
