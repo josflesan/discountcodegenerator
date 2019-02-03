@@ -1,5 +1,5 @@
 # Lemurer Discount Code Generator [Version Alpha 0.0.6c]
-# Last Update: 26.01.19
+# Last Update: 03.02.19
 
 
 # ---------------
@@ -517,6 +517,7 @@ def generate_code():
     c.SetDiscount(amount)
     c.SetTimeToExpire(days_until_expire)
 
+    # Store new cord record inside hash table
     codes_limit = config_data["codes_limit"]
     code_address = hash(c.GetCode()) % codes_limit
 
