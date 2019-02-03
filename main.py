@@ -1,11 +1,5 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.6a]
+# Lemurer Discount Code Generator [Version Alpha 0.0.6b]
 # Last Update: 26.01.19
-
-
-def project_credits():
-    print('''
-Lemurer Discount Code Generator [Version Alpha 0.0.6a]
-Copyright <c> 2019 Lemurer Company''')
 
 
 # ---------------
@@ -16,6 +10,14 @@ import pickle  # used for binary files manipulations
 import time  # give information about dates and time
 import hashlib  # hashing algorithms
 import uuid  # random, unique code ID
+
+
+# ---------------
+# Program Credits
+def project_credits():
+    print('''
+Lemurer Discount Code Generator [Version Alpha 0.0.6a]
+Copyright <c> 2019 Lemurer Company''')
 
 
 # ------------------
@@ -32,15 +34,62 @@ class DiscountCode:
 
     num = 0  # Counter (increases every time new code is created)
 
-    def __init__(self, id, amt, date, exp, valid):
-        self.codeID = id  # unique code ID number given to each code
-        self.amount = amt  # amount of discount percentage
-        self.code = self.num  # code number
-        self.creationDate = date  # date of code creation
-        self.timeToExpire = exp  # days until expiration
-        self.codeValid = valid  # boolean flag to indicate whether the code is valid or not
+    def __init__(self, cID):  # constructor
+        self.__codeID = cID  # unique code ID number given to each code
+        self.__amount = 0  # amount of discount percentage
+        self.__code = self.num  # code number
+        self.__creationDate = today()  # date of code creation
+        self.__timeToExpire = 0  # days until expiration
+        self.__codeValid = True  # boolean flag to indicate whether the code is valid or not
 
         self.num += 1
+
+    def SetDiscount(self, amount):  # setter
+        self.__amount = amount
+
+    def SetCodeValid(self, valid):  # setter
+        self.__codeValid = valid
+
+    def SetTimeToExpire(self, time_to_exp):  # setter
+        self.__timeToExpire = time_to_exp
+
+    def GetDiscount(self):  # setter
+        return self.__amount
+
+    def GetCode(self):  # getter
+        return self.__codeID
+
+    def GetNumber(self): # getter
+        return self.__code
+
+    def GetCreationDate(self):  # getter
+        return self.__creationDate
+
+    def GetTimeToExpire(self):  # getter
+        return self.__timeToExpire
+
+    def GetValid(self):  # getter
+        return self.__codeValid
+
+    def UpdateCode(self):  # setter
+        # procedure that checks if the code has expired or not, it will update the codeValid flag accordingly
+        pass
+
+    def PrintCode(self):
+        print('''
+---------------------------
+CodeID : {0}
+Code Number: {1}
+Discount Amount: {2}
+Creation Date: {3}
+Time To Expire: {4}
+Valid: {5}
+----------------------------'''.format(self.GetCode,
+                                       self.GetNumber,
+                                       self.GetDiscount,
+                                       self.GetCreationDate,
+                                       self.GetTimeToExpire,
+                                       self.GetValid))
 
 
 # --------------
@@ -61,17 +110,17 @@ def today():
     # Function that returns today's date.
     # dd/mm/yyyy format
 
-    todays_date = time.strftime("%d/%m/%Y")
-    return todays_date
+    today_date = time.strftime("%d/%m/%Y")
+    return today_date
 
 
-def table_output(codes: list):
+def table_output(codes):
     # Function that contains code for enhanced output of code details
     # Parameter: list of code objects
 
     sep = '-' * 113  # Separator for table
 
-    print("{:^82}".format("ACTIVE CODES"))
+    print("{:^82}".format("CODES"))
     print(sep)
     print("{:<8s}{:>12s}{:>25s}{:>21s}{:>25s}".format("CODE #", "CODE ID", "DISCOUNT PERCENTAGE", "CREATION DATE",
                                                "DAYS FOR EXPIRATION"))
@@ -82,6 +131,12 @@ def table_output(codes: list):
                                                    c.timeToExpire))
 
     print(sep)
+
+
+def code_output(codes):
+    for i in range(len(codes)):
+        if codes[i].GetCode > 0:
+            codes[i].PrintCode()
 
 
 def lemur():
@@ -245,6 +300,7 @@ def open_file():
     current_location = os.getcwd() + "/" + MAIN_FILE_NAME  # get current .py location
     print(">> Input file name")
     file_name = input("main@commands_menu@openfile $ ")
+    global new_file_location
     new_file_location = current_location + "/" + file_name
 
     # Load config.dat into config_data
@@ -255,6 +311,7 @@ def open_file():
         return 1
 
     try:
+        global config_data
         config_data = (pickle.load(file_handle))
     except EOFError:
         print("Failed to load config file data")
@@ -278,9 +335,10 @@ def open_file():
         print(file_name, ": file not found")
         return 1
     try:
+        global stats_data
         stats_data = (pickle.load(file_handle))
     except EOFError:
-        print("Failed to load config stats data")
+        print("Failed to load stats data")
         return 1
     file_handle.close()
 
@@ -291,6 +349,7 @@ def open_file():
         print(file_name, ": file not found")
         return 1
 
+    global active_data
     active_data = []  # initialise inactive_data array
 
     EOF = False
@@ -308,17 +367,15 @@ def open_file():
         print(file_name, ": file not found")
         return 1
 
-    inactive_data = []  # initialise inactive_data array
-
-    EOF = False
-    while not EOF:
-        try:
-            inactive_data.append(pickle.load(file_handle))
-        except EOFError:
-            EOF = True
+    try:
+        global inactive_data
+        inactive_data = (pickle.load(file_handle))
+    except EOFError:
+        print("Failed to load inactive codes data")
+        return 1
     file_handle.close()
 
-    return 2
+    return 2  # When the file is opened successfully the priority is updated
 
 
 def new_file():
@@ -396,19 +453,21 @@ Lemurer Company 2019\n
 
     # Create stats.dat inside new_file_location
     file_handle = open(new_file_location + "/stats.dat", "wb")  # open file for binary write
-    config_details = {"file_creation": today(),
+    stats_details = {"file_creation": today(),
                       "last_update": today(),
                       "generated_codes": 0,
-                      "inactive_codes": 0,
+                      "validated_codes" : 0,
+                      "expired_codes": 0,
                       }  # dictionary containing configuration details
-    pickle.dump(config_details, file_handle)  # write whole dictionary to the binary file stats.dat
+    pickle.dump(stats_details, file_handle)  # write whole dictionary to the binary file stats.dat
     file_handle.close()  # close binary file stats.dat
 
     # Create active.codes inside new_file_location
     file_handle = open(new_file_location + "/active.codes", "wb")  # open active codes file for binary write
     active_codes = []  # initialise inactive codes array
     for i in range(codes_limit):
-        active_codes.append(DiscountCode(0, 0, 0, 0, 0))  # making active codes as:
+        # Fill all the file with dummy records
+        active_codes.append(DiscountCode(0))  # making active codes as:
                                                             # [DiscountCode() for i in range(codes_limit)]
         pickle.dump(active_codes[i], file_handle)  # write a whole record to binary file active.codes
 
@@ -416,11 +475,8 @@ Lemurer Company 2019\n
 
     # Create inactive.codes inside new_file_location
     file_handle = open(new_file_location + "/inactive.codes", "wb")  # open inactive codes file for binary write
-    inactive_codes = []  # initialise inactive codes array
-    for i in range(codes_limit):
-        inactive_codes.append(DiscountCode(0, 0, 0, 0, 0))  # making inactive codes as:
-                                                            # [DiscountCode() for i in range(codes_limit)]
-        pickle.dump(inactive_codes[i], file_handle)  # write a whole record to binary file inactive.codes
+    inactive_codes = ["0"]  # initialise inactive codes array
+    pickle.dump(inactive_codes, file_handle)  # write a whole array to binary file inactive.codes
 
     file_handle.close()  # close inactive.codes file
 
@@ -428,43 +484,70 @@ Lemurer Company 2019\n
 # -------------------------
 # Priority "three" commands
 
-def generate_code(codes: list):
+def generate_code():
     # Generates code and inserts it into codes object list
 
-    id = str(uuid.uuid4().fields[-1])[:5]
+    code_id = str(uuid.uuid4().fields[-1])[:5]
 
-    amount = input("main@commands_menu@generate_code $ Input discount amount for code: ")
+    print(">> Input discount amount for code")
+    amount = input("main@commands_menu@generate_code $ ")
     while True:
         try:
             assert(0 < int(amount) <= 100)
             break
         except AssertionError:
-            amount = input("main@commands_menu@generate_code $ Not an integer, try again: ")
+            print(amount, " : is not a valid integer")
+            amount = input("main@commands_menu@generate_code $ ")
             continue
 
-    date = today()
-    days_until_expire = 7  # the expiration date is specified by the user, if the input is 9999 or above it will be
-    valid = True           # treated as "forever", so it has no expiration date
+    print(">> Input amount of days until code expires")
+    days_until_expire = input("main@commands_menu@generate_code $ ")
+    while True:
+        try:
+            assert(0 < int(days_until_expire) <= 999999)
+            break
+        except AssertionError:
+            print(amount, " : is not a valid  integer")
+            days_until_expire = input("main@commands_menu@generate_code $ ")
+            continue
 
-    c = DiscountCode(id, amount, date, days_until_expire, valid)
+    c = DiscountCode(code_id)
+    c.SetDiscount(amount)
+    c.SetTimeToExpire(days_until_expire)
 
-    codes.append(c)
+    codes_limit = config_data["codes_limit"]
+    code_address = hash(c.GetCode()) % codes_limit
 
-
-def file_active_codes(codes: list):
-    active = [c for c in codes if c.codeValid]  # list comprehension selecting active codes
-    table_output(active)
-
-
-def file_inactive_codes(codes: list):
-    inactive = [c for c in codes if not c.codeValid]  # list comprehension selecting inactive codes
-    table_output(inactive)
+    active_data[code_address] = c
+    stats_data["generated_codes"] += 1
+    save_file()
 
 
-def clear_file_inactive_codes(codes: list):
-    for c in codes:
-        if not c.codeValid:
-            del c  # delete inactive codes from codes list
+def update_codes():
+    # Procedure that checks all codes and check if they have expired or not
+    codes_limit = config_data["codes_limit"]
+    for i in range(codes_limit):
+        active_data[i].UpdateCode()  # check if code has expired
+        if not active_data[i].GetValid():
+            inactive_data.append(active_data[i])
+            active_data[i] = DiscountCode(0)
+            global stats_data
+            stats_data["expired_codes"] += 1
+
+
+def file_active_codes():
+    #table_output(active_data)
+    code_output(active_data)
+
+
+def file_inactive_codes():
+    #table_output(inactive_data)
+    code_output(inactive_data)
+
+
+def clear_file_inactive_codes():
+    global inactive_data
+    inactive_data = ["0"]
 
 
 def file_settings():
@@ -472,11 +555,44 @@ def file_settings():
 
 
 def file_stats():
-    pass
+    global stats_data
+    print('''
+File Creation: {0}
+Last Update: {1}
+Generated Codes: {2}
+Validated Codes: {3}
+Expired Codes: {4}'''.format(stats_data["file_creation"],
+                             stats_data["last_update"],
+                             stats_data["generated_codes"],
+                             stats_data["validated_codes"],
+                             stats_data["expired_codes"]))
 
 
 def save_file():
-    pass
+    # Saving config.dat
+    file_handle = open(new_file_location + "/config.dat", "wb")  # open file for binary write
+    pickle.dump(config_data, file_handle)  # write whole dictionary to the binary file config.dat
+    file_handle.close()  # close binary file config.dat
+    # Saving stats.dat
+    file_handle = open(new_file_location + "/stats.dat", "wb")  # open file for binary write
+    global stats_data
+    stats_data["last_update"] = today()
+    pickle.dump(stats_data, file_handle)  # write whole dictionary to the binary file stats.dat
+    file_handle.close()  # close binary file stats.dat
+    # Saving active.codes
+    file_handle = open(new_file_location + "/active.codes", "wb")  # open active codes file for binary write
+    codes_limit = config_data["codes_limit"]
+    for i in range(codes_limit):
+        # Fill all the file with dummy records
+        pickle.dump(active_data[i], file_handle)  # write a whole record to binary file active.codes
+
+    file_handle.close()  # close active.codes file
+    # Saving inactive.codes
+    file_handle = open(new_file_location + "/inactive.codes", "wb")
+    pickle.dump(inactive_data, file_handle)  # write whole array to the binary file inactive.codes
+    file_handle.close()  # close inactive.codes file
+    print("File Saved")
+    print("")
 
 
 def close_file():
@@ -485,6 +601,8 @@ def close_file():
 
 
 # ****************** Main program ******************
+c23 = DiscountCode(21)
+c23.PrintCode()
 
 def main():
     priority = 1  # user starts with priority "one" since no file has been opened/created
