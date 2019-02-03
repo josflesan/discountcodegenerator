@@ -491,6 +491,7 @@ def generate_code():
 
     code_id = str(uuid.uuid4().fields[-1])[:5]
 
+    # Input amount of discount
     print(">> Input discount amount for code")
     amount = input("main@commands_menu@generate_code $ ")
     while True:
@@ -502,6 +503,7 @@ def generate_code():
             amount = input("main@commands_menu@generate_code $ ")
             continue
 
+    # Input days until expiration
     print(">> Input amount of days until code expires")
     days_until_expire = input("main@commands_menu@generate_code $ ")
     while True:
@@ -513,13 +515,14 @@ def generate_code():
             days_until_expire = input("main@commands_menu@generate_code $ ")
             continue
 
-    c = DiscountCode(code_id)
-    c.SetDiscount(amount)
-    c.SetTimeToExpire(days_until_expire)
+    # Create new code record
+    new_code = DiscountCode(code_id)
+    new_code.SetDiscount(amount)
+    new_code.SetTimeToExpire(days_until_expire)
 
-    # Store new cord record inside hash table
+    # Store new code record inside hash table
     codes_limit = config_data["codes_limit"]
-    code_address = hash(c.GetCode()) % codes_limit
+    code_address = hash(new_code.GetCode()) % codes_limit
 
     active_data[code_address] = c
     stats_data["generated_codes"] += 1
