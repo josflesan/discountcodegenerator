@@ -587,12 +587,14 @@ def save_file():
     file_handle = open(new_file_location + "/config.dat", "wb")  # open file for binary write
     pickle.dump(config_data, file_handle)  # write whole dictionary to the binary file config.dat
     file_handle.close()  # close binary file config.dat
+
     # Saving stats.dat
     file_handle = open(new_file_location + "/stats.dat", "wb")  # open file for binary write
     global stats_data
     stats_data["last_update"] = today()
     pickle.dump(stats_data, file_handle)  # write whole dictionary to the binary file stats.dat
     file_handle.close()  # close binary file stats.dat
+
     # Saving active.codes
     file_handle = open(new_file_location + "/active.codes", "wb")  # open active codes file for binary write
     codes_limit = config_data["codes_limit"]
@@ -601,6 +603,7 @@ def save_file():
         pickle.dump(active_data[i], file_handle)  # write a whole record to binary file active.codes
 
     file_handle.close()  # close active.codes file
+    
     # Saving inactive.codes
     file_handle = open(new_file_location + "/inactive.codes", "wb")
     pickle.dump(inactive_data, file_handle)  # write whole array to the binary file inactive.codes
