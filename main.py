@@ -1,4 +1,4 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.6c]
+# Lemurer Discount Code Generator [Version Alpha 0.0.6d]
 # Last Update: 03.02.19
 
 
@@ -178,7 +178,8 @@ def commands_menu(priority):
                 "settings": [file_settings, 2],
                 "stats": [file_stats, 2],
                 "savefile": [save_file, 2],
-                "closefile": [close_file, 2]
+                "closefile": [close_file, 2],
+                "usecode": [use_code, 2]
                 }
     print("")
     print(">> Input a valid command, type \"commands\" to view all commands")
@@ -258,6 +259,7 @@ def commands_list():
 <clearinactivecodes> | <cicodes> : delete all inactive codes
 <settings> : view and modify configuration of file
 <stats> : view file's statistics
+<usecode> : use a discount code
 '''
 
     page_number = 1  # starts reading from first page
@@ -527,6 +529,10 @@ def generate_code():
     active_data[code_address] = c
     stats_data["generated_codes"] += 1
     save_file()
+
+
+def use_code():
+    pass
 
 
 def update_codes():
