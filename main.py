@@ -1,4 +1,4 @@
-# Lemurer Discount Code Generator [Version Alpha 0.0.6d]
+# Lemurer Discount Code Generator [Version Alpha 0.0.6e]
 # Last Update: 03.02.19
 
 
