@@ -532,6 +532,7 @@ def generate_code():
 
 
 def use_code():
+    # Validate the discount code, by using it it becomes inactive.
     pass
 
 
