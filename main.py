@@ -134,6 +134,8 @@ def table_output(codes):
 
 
 def code_output(codes):
+    # Procedure that prints codes data of an array.
+    # If the codeID is 0 (a dummy record) it will not consider it.
     for i in range(len(codes)):
         if codes[i].GetCode() != 0:
             codes[i].PrintCode()
